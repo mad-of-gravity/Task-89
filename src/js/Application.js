@@ -11,6 +11,8 @@ export default class Application extends EventEmitter {
   constructor() {
     super();
 
+    this._loading = document.createElement("progress");
+
     const box = document.createElement("div");
     box.classList.add("box");
     box.innerHTML = this._render({
