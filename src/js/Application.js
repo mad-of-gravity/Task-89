@@ -26,6 +26,18 @@ export default class Application extends EventEmitter {
     this.emit(Application.events.READY);
   }
 
+
+  load() {}
+
+
+  create() {}
+
+
+  startLoading() {}
+
+
+  stopLoading() {}
+
   _render({ name, terrain, population }) {
     return `
 <article class="media">
