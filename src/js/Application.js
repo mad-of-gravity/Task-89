@@ -28,33 +28,33 @@ export default class Application extends EventEmitter {
     const url = "https://swapi.boom.dev/api/planets";
     this.planets = [];
 
-    Application._load(url).then((response) => {
+    this._load(url).then((response) => {
       this.planets = [...this.planets, ...response.results];
       console.log(this.planets);
-      
-      Application._load(response.next).then((response) => {
+
+      this._load(response.next).then((response) => {
         this.planets = [...this.planets, ...response.results];
         console.log(this.planets);
 
-        Application._load(response.next).then((response) => {
+        this._load(response.next).then((response) => {
           this.planets = [...this.planets, ...response.results];
           console.log(this.planets);
 
-          Application._load(response.next).then((response) => {
+          this._load(response.next).then((response) => {
             this.planets = [...this.planets, ...response.results];
             console.log(this.planets);
 
-            Application._load(response.next).then((response) => {
+            this._load(response.next).then((response) => {
               this.planets = [...this.planets, ...response.results];
               console.log(this.planets);
 
-              Application._load(response.next)
+              this._load(response.next)
                 .then((response) => {
                   this.planets = [...this.planets, ...response.results];
                   console.log(this.planets);
                 })
                 .then((data) => {
-                  this.stopLoading();
+                  this._stopLoading();
                   this._create();
                 });
             });
@@ -64,7 +64,7 @@ export default class Application extends EventEmitter {
     });
   }
 
-  static async _load(url) {
+  async _load(url) {
     const response = await fetch(url);
     const data = await response.json();
 
@@ -73,7 +73,7 @@ export default class Application extends EventEmitter {
 
   _create() {
     let planetCard = null;
-    
+
     this.planets.forEach((planet) => {
       const { name, terrain, population } = planet;
 
@@ -89,11 +89,11 @@ export default class Application extends EventEmitter {
     });
   }
 
-  startLoading() {
+  _startLoading() {
     this._loading.style.visibility = "visible";
   }
 
-  stopLoading() {
+  _stopLoading() {
     this._loading.style.visibility = "hidden";
   }
 
