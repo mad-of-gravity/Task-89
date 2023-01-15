@@ -28,27 +28,27 @@ export default class Application extends EventEmitter {
     const url = "https://swapi.boom.dev/api/planets";
     this.planets = [];
 
-    Application.load(url).then((response) => {
+    Application._load(url).then((response) => {
       this.planets = [...this.planets, ...response.results];
       console.log(this.planets);
-
-      Application.load(response.next).then((response) => {
+      
+      Application._load(response.next).then((response) => {
         this.planets = [...this.planets, ...response.results];
         console.log(this.planets);
 
-        Application.load(response.next).then((response) => {
+        Application._load(response.next).then((response) => {
           this.planets = [...this.planets, ...response.results];
           console.log(this.planets);
 
-          Application.load(response.next).then((response) => {
+          Application._load(response.next).then((response) => {
             this.planets = [...this.planets, ...response.results];
             console.log(this.planets);
 
-            Application.load(response.next).then((response) => {
+            Application._load(response.next).then((response) => {
               this.planets = [...this.planets, ...response.results];
               console.log(this.planets);
 
-              Application.load(response.next)
+              Application._load(response.next)
                 .then((response) => {
                   this.planets = [...this.planets, ...response.results];
                   console.log(this.planets);
@@ -64,7 +64,7 @@ export default class Application extends EventEmitter {
     });
   }
 
-  static async load(url) {
+  static async _load(url) {
     const response = await fetch(url);
     const data = await response.json();
 
