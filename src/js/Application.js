@@ -11,7 +11,7 @@ export default class Application extends EventEmitter {
   constructor() {
     super();
 
-    this._loading = document.createElement("progress");
+    this._loading = document.querySelector(".progress");
 
     const box = document.createElement("div");
     box.classList.add("box");
@@ -24,19 +24,78 @@ export default class Application extends EventEmitter {
     document.body.querySelector(".main").appendChild(box);
 
     this.emit(Application.events.READY);
+
+    const url = "https://swapi.boom.dev/api/planets";
+    this.planets = [];
+
+    Application.load(url).then((response) => {
+      this.planets = [...this.planets, ...response.results];
+      console.log(this.planets);
+
+      Application.load(response.next).then((response) => {
+        this.planets = [...this.planets, ...response.results];
+        console.log(this.planets);
+
+        Application.load(response.next).then((response) => {
+          this.planets = [...this.planets, ...response.results];
+          console.log(this.planets);
+
+          Application.load(response.next).then((response) => {
+            this.planets = [...this.planets, ...response.results];
+            console.log(this.planets);
+
+            Application.load(response.next).then((response) => {
+              this.planets = [...this.planets, ...response.results];
+              console.log(this.planets);
+
+              Application.load(response.next)
+                .then((response) => {
+                  this.planets = [...this.planets, ...response.results];
+                  console.log(this.planets);
+                })
+                .then((data) => {
+                  this.stopLoading();
+                  this._create();
+                });
+            });
+          });
+        });
+      });
+    });
   }
 
+  static async load(url) {
+    const response = await fetch(url);
+    const data = await response.json();
 
-  load() {}
+    return Promise.resolve(data);
+  }
 
+  _create() {
+    let planetCard = null;
+    
+    this.planets.forEach((planet) => {
+      const { name, terrain, population } = planet;
 
-  create() {}
+      planetCard = document.createElement("div");
+      planetCard.classList.add("box");
+      planetCard.innerHTML = this._render({
+        name: name,
+        terrain: terrain,
+        population: population,
+      });
 
+      document.body.querySelector(".main").appendChild(planetCard);
+    });
+  }
 
-  startLoading() {}
+  startLoading() {
+    this._loading.style.visibility = "visible";
+  }
 
-
-  stopLoading() {}
+  stopLoading() {
+    this._loading.style.visibility = "hidden";
+  }
 
   _render({ name, terrain, population }) {
     return `
